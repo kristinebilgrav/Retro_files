@@ -1,0 +1,24 @@
+import os
+from os import listdir
+from os.path import isfile, join
+import sys
+
+print(sys.argv[1])
+
+bamlist = listdir(sys.argv[1])  #hej.txt /path
+
+#print(bamlist)
+
+for i in bamlist:
+        if (i.endswith('.bam')):
+                #print(i)
+                #print(sys.argv[1] + "/" + i )
+
+                #bam_path=sys.argv[1] + "/" + i
+                #sample_id=i.replace(".bam","")
+                #print("bash hej.sh " + bam_path  + " "  + sample_id)
+
+                os.system("sbatch hej.sh " + sys.argv[1] + "/" + i +" " + i)
+
+#bam="bamfile.bam"
+#print( os.system("sbatch delly.sh "  + bam ) )
