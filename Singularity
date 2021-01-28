@@ -25,8 +25,8 @@ LD_LIBRARY_PATH=/opt/root/lib
     
     export PATH=/opt/anaconda/bin:${PATH} 
     
-    conda install samtools=0.1.19
-    conda install bcftools
-    conda install BEDTools
+    conda install -c bioconda samtools=0.1.19
+    conda install -c bioconda bcftools
+    conda install -c bioconda BEDTools
     
     cd /bin/ && git clone https://github.com/tk2/RetroSeq.git
