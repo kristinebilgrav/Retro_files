@@ -29,4 +29,4 @@ LD_LIBRARY_PATH=/opt/root/lib
     conda install -c bioconda bcftools
     conda install -c bioconda BEDTools
     
-    cd /bin/ && git clone https://github.com/tk2/RetroSeq.git
+    cd /bin/ && git clone https://github.com/kristinebilgrav/RetroSeq.git
