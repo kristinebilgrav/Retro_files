@@ -22,14 +22,15 @@ LD_LIBRARY_PATH=/opt/root/lib
     cd /root/ && wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
     cd /root/ && chmod 700 ./Miniconda2-latest-Linux-x86_64.sh
     cd /root/ && bash ./Miniconda2-latest-Linux-x86_64.sh -b -p /opt/anaconda/   
-
+    
+    export PATH=/opt/anaconda/bin:${PATH} 
+    
     module load bioinfo-tools samtools/0.1.19
     module load bioinfo-tools bcftools
     module load bioinfo-tools BEDTools
 
 
     perl /proj/nobackup/sens2017106/wharf/kbilgrav/kbilgrav-sens2017106/RetroSeq/bin/retroseq.pl -discover -bam $1  -output $2.output.vcf  -refTEs /proj/nobackup/sens2017106/test_retroseq/RetroSeq/repeatElement.tab
-
     perl /proj/nobackup/sens2017106/wharf/kbilgrav/kbilgrav-sens2017106/RetroSeq/bin/retroseq.pl  -call -bam $1  -input $2.output.vcf  -ref /proj/sens2017106/reference_material/fasta/human_g1k_v37.fasta  -output $2.final.vcf
 
 
