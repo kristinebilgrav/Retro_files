@@ -3,42 +3,34 @@ import sys
 #extracts freq/occ information in queried files
 
 fileInput = open(sys.argv[1], "r") #txt file with links to files
-fileOutput = open(sys.argv[2] + "_f.tab", "w") #file with flagfiltered
-freqfile = open(sys.argv[2] + "_freq.tab", "w")
-filepath = sys.argv[2]
-ID = filepath.split("/")[-1]
+fileOutput = open(sys.argv[2], "w") #file with freq, ID, ME type
+fileOutput.write("#ID" + "\t" + "IDnum" + "\t" + "MEtype" + "\t" + "frequency" + "\n")
 
-freqfile.write("#" + ID + "\t" + "MEtype"  + "\t" + "frequency" + "\n")
+#filter frequency/occurances
 
 freq = []
 i=0
 for line in fileInput:
     line = line.strip("\n")
-    i+=1
-    if line.startswith("#"):
+    ID = line.split("/")[-1].split("_")[0]
+    for row in open(line):
+        if row.startswith("#"):
+            continue
+        tabs = row.split("\t")
 
-        continue
+        Metype =row.split("MEINFO=")[-1].split(",")[0]
+        frq="0"
+        i+=1
+	if "OCC" in tabs[-3]:
+            #print(line)
+            #occ = row.split(";OCC=")[-1].split(";")[0]
+            frq = row.split(";FRQ=")[-1].split("\t")[0]
+        if float(frq) > float(0):
+            #print(ID + "\t" + str(i)+ "\t" + Metype + "\t" +frq)
+            fileOutput.write(ID + "\t" + str(i)+ "\t" + Metype + "\t" + frq + "\n")
+        if "OCC" not in tabs[-3]:
+            fileOutput.write(ID + "\t" + str(i)+ "\t" + Metype + "\t" + "0.0" + "\n")
 
-    tabs = line.split("\t")
-
-    Metype =line.split("MEINFO=")[-1].split(",")[0]
-    frq="0"
-    if "OCC" in tabs[-3]:
-        frq = line.split(";FRQ=")[-1].split("\t")[0]
-    if float(frq) > float(0):
-        freqfile.write(str(i) + "\t" + Metype + "\t" + frq + "\n")
-
-    if "OCC" not in tabs[-3]:
-        try:
-            flag = line.split("CLIP3 ")[-1].split("\t")[-1].split(":")[2]
-            if int(flag) > int(5):
-                fileOutput.write(line + "\n")
-                continue
-        except:
-            print("ERROR" + ID)
 
 #fileOutput.close()
-
-
-
 
