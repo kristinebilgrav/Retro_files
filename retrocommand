@@ -1,23 +1,17 @@
 #!/bin/bash -l
 #SBATCH -A sens2017106
 #SBATCH -p core
-#SBATCH -n 1
-#SBATCH -t 3-00:00:00
-#SBATCH -J retro
+#SBATCH -n 2
+#SBATCH -t 7-00:00:00
+#SBATCH -J clinical_retro
 
-module load bioinfo-tools samtools
-
-cp $1 $TMPDIR/$2.cram
-samtools view -b -h -T /proj/nobackup/sens2017106/wharf/kbilgrav/kbilgrav-sens2017106/1000genomes/GRCh38_full_analysis_set_plus_decoy_hla.fa $TMPDIR/$2.cram >  $TMPDIR/$2.bam
-samtools index  $TMPDIR/$2.bam
-
-module unload samtools
 module load bioinfo-tools samtools/0.1.19
+#module load bioinfo-tools bcftools
+#module load bioinfo-tools BEDTools
+
 cd $TMPDIR
+singularity exec --bind /proj/sens2017106/private/clinical_genomics  /proj/nobackup/sens2017106/wharf/kbilgrav/kbilgrav-sens2017106/RetroSeq/bin/retro_container.sif perl /bin/RetroSeq/bin/retroseq.pl -discover -bam $1  -output $2.output.vcf  -refTEs /proj/nobackup/sens2017106/test_retroseq/RetroSeq/repeatElement.tab
 
-singularity exec --bind /dataset/swegen/  /proj/nobackup/sens2017106/wharf/kbilgrav/kbilgrav-sens2017106/RetroSeq/bin/retro_container.sif perl /bin/RetroSeq/bin/retroseq.pl -discov$
-singularity exec --bind /dataset/swegen/ /proj/nobackup/sens2017106/wharf/kbilgrav/kbilgrav-sens2017106/RetroSeq/bin/retro_container.sif perl /bin/RetroSeq/bin/retroseq.pl  -call -$
-
-mkdir /proj/nobackup/sens2017106/kristine/SweGen38/$2
-cp  $TMPDIR/*vcf /proj/nobackup/sens2017106/kristine/SweGen38/$2
-
+singularity exec --bind /proj/sens2017106/private/clinical_genomics /proj/nobackup/sens2017106/wharf/kbilgrav/kbilgrav-sens2017106/RetroSeq/bin/retro_container.sif perl /bin/RetroSeq/bin/retroseq.pl  -call -bam $1  -input $2.output.vcf  -ref /proj/sens2017106/reference_material/fasta/human_g1k_v37.fasta  -output $2.final.vcf
+mkdir /proj/nobackup/sens2017106/kristine/clinical/$2
+cp $TMPDIR/*vcf /proj/nobackup/sens2017106/kristine/clinical/$2
